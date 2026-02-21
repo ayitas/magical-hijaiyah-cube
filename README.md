@@ -16,6 +16,19 @@ An interactive 3D educational game to learn **all 28 Hijaiyah (Arabic alphabet)*
 - **100% Standalone** — Single `index.html` file, no build step, no external assets
 - **Responsive** — Works on mobile, tablet, and desktop
 
+## 🎯 Game Modes
+
+### 🎲 Explore Mode
+Browse through all 28 letters by tapping and rotating the 3D cube. Each letter is spoken aloud with Arabic pronunciation.
+
+### ✏️ Challenge Mode
+Listen to each letter's pronunciation and pick the correct Arabic letter from 4 choices. Progress through all 28 letters sequentially.
+
+### 🖌️ Draw Mode
+Practice writing Hijaiyah letters! A faded reference letter guides your strokes on the canvas. The app uses pixel-based template matching to validate your drawing — get ≥35% match to advance to the next letter.
+
+> Feedback messages are in Indonesian: **"Kamu benar, ayo lanjut!"** (correct) / **"Kamu salah, ayo coba lagi!"** (wrong)
+
 ## 🚀 Quick Start
 
 ### Option 1: Open Directly
@@ -59,7 +72,7 @@ netlify deploy --prod --dir .
 
 ```
 magical-hijaiyah-cube/
-├── index.html    ← The entire game (single file, ~1900 lines)
+├── index.html    ← The entire game (single file, ~2800 lines)
 └── README.md     ← You are here
 ```
 
@@ -80,7 +93,7 @@ magical-hijaiyah-cube/
 | [Three.js](https://threejs.org/) v0.160.0 | 3D rendering, raycasting, materials |
 | [GSAP](https://greensock.com/gsap/) v3.12.5 | Animations (squash, rotation, particles) |
 | Web Audio API | Synthesized SFX & background music |
-| HTML5 Canvas | Dynamic texture generation |
+| HTML5 Canvas | Dynamic texture generation & Draw mode |
 | Google TTS / Web Speech API | Arabic letter pronunciation |
 
 ## 📄 License

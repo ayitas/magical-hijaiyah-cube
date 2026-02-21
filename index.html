@@ -474,6 +474,317 @@
             text-align: center;
             animation: letter-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
+
+        /* ===== MODE TOGGLE ===== */
+        .mode-buttons {
+            position: absolute;
+            top: clamp(12px, 3vw, 24px);
+            left: clamp(62px, 10vw, 90px);
+            display: flex;
+            gap: 6px;
+            pointer-events: auto;
+            z-index: 20;
+        }
+
+        .btn-mode {
+            height: clamp(42px, 6vw, 56px);
+            border-radius: 999px;
+            border: none;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(6px);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 0 clamp(12px, 2vw, 18px);
+            font-family: var(--font-main);
+            font-size: clamp(0.7rem, 2vw, 0.9rem);
+            font-weight: 700;
+            color: #7c3aed;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            transition: transform 0.2s ease, background 0.2s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .btn-mode:hover {
+            transform: scale(1.06);
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .btn-mode:active {
+            transform: scale(0.95);
+        }
+
+        .btn-mode .mode-icon {
+            font-size: 1.3em;
+            line-height: 1;
+        }
+
+        /* ===== CHALLENGE MODE ===== */
+        #challenge-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 40;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(253, 242, 248, 0.94);
+            backdrop-filter: blur(10px);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+        }
+
+        #challenge-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .challenge-progress {
+            font-size: clamp(0.8rem, 2.5vw, 1rem);
+            font-weight: 700;
+            color: #a78bfa;
+            margin-bottom: 8px;
+        }
+
+        .challenge-progress-bar {
+            width: min(240px, 55vw);
+            height: 6px;
+            background: rgba(167, 139, 250, 0.2);
+            border-radius: 999px;
+            overflow: hidden;
+            margin-bottom: clamp(16px, 4vw, 32px);
+        }
+
+        .challenge-progress-fill {
+            height: 100%;
+            width: 0%;
+            background: var(--btn-gradient);
+            border-radius: 999px;
+            transition: width 0.5s ease;
+        }
+
+        .challenge-prompt {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: clamp(8px, 2vw, 14px);
+            margin-bottom: clamp(10px, 3vw, 20px);
+        }
+
+        .challenge-prompt-label {
+            font-size: clamp(1rem, 3vw, 1.3rem);
+            font-weight: 600;
+            color: #6b21a8;
+        }
+
+        .challenge-prompt-name {
+            font-size: clamp(2.2rem, 7vw, 3.5rem);
+            font-weight: 800;
+            background: var(--btn-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .challenge-listen-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 20px;
+            border: none;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #34d399, #22d3ee);
+            color: #fff;
+            font-family: var(--font-main);
+            font-size: clamp(0.85rem, 2.5vw, 1rem);
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .challenge-listen-btn:active {
+            transform: scale(0.93);
+        }
+
+        .challenge-feedback {
+            min-height: clamp(36px, 6vw, 48px);
+            font-size: clamp(1rem, 3vw, 1.4rem);
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: clamp(10px, 3vw, 18px);
+            transition: opacity 0.3s ease;
+        }
+
+        .challenge-feedback.correct {
+            color: #16a34a;
+        }
+
+        .challenge-feedback.wrong {
+            color: #dc2626;
+        }
+
+        .challenge-choices {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: clamp(12px, 3vw, 20px);
+            width: min(320px, 75vw);
+        }
+
+        .challenge-choice {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            aspect-ratio: 1;
+            border: 4px solid rgba(167, 139, 250, 0.3);
+            border-radius: clamp(16px, 3vw, 24px);
+            background: rgba(255, 255, 255, 0.8);
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.15s, border-color 0.2s, background 0.2s;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+
+        .challenge-choice:active {
+            transform: scale(0.92);
+        }
+
+        .challenge-choice.correct-flash {
+            border-color: #16a34a;
+            background: rgba(134, 239, 172, 0.4);
+            animation: letter-pop 0.4s ease;
+        }
+
+        .challenge-choice.wrong-flash {
+            border-color: #dc2626;
+            background: rgba(252, 165, 165, 0.3);
+            animation: shake 0.4s ease;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            20% {
+                transform: translateX(-8px);
+            }
+
+            40% {
+                transform: translateX(8px);
+            }
+
+            60% {
+                transform: translateX(-6px);
+            }
+
+            80% {
+                transform: translateX(4px);
+            }
+        }
+
+        /* ===== DRAW MODE ===== */
+        #draw-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 40;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(253, 242, 248, 0.94);
+            backdrop-filter: blur(10px);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+        }
+
+        #draw-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .draw-prompt {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: clamp(4px, 1.5vw, 10px);
+            margin-bottom: clamp(8px, 2vw, 16px);
+        }
+
+        .draw-prompt-label {
+            font-size: clamp(1rem, 3vw, 1.3rem);
+            font-weight: 600;
+            color: #6b21a8;
+        }
+
+        .draw-prompt-name {
+            font-size: clamp(1.6rem, 5vw, 2.5rem);
+            font-weight: 800;
+            background: var(--btn-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .draw-canvas-container {
+            position: relative;
+            width: min(300px, 75vw);
+            height: min(300px, 75vw);
+            border-radius: clamp(16px, 3vw, 24px);
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(124, 58, 237, 0.12);
+            border: 4px solid rgba(167, 139, 250, 0.3);
+            background: #fff;
+        }
+
+        .draw-canvas-container canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            cursor: crosshair;
+            touch-action: none;
+        }
+
+        .draw-reference {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: min(200px, 50vw);
+            color: rgba(167, 139, 250, 0.12);
+            pointer-events: none;
+            font-family: 'Arial', 'Noto Sans Arabic', sans-serif;
+            line-height: 1;
+        }
+
+        .draw-toolbar {
+            display: flex;
+            gap: clamp(10px, 2vw, 16px);
+            margin-top: clamp(8px, 2vw, 14px);
+        }
+
+        .draw-toolbar .btn {
+            padding: clamp(10px, 2vw, 14px) clamp(20px, 4vw, 32px);
+            font-size: clamp(0.85rem, 2.5vw, 1.1rem);
+        }
+
+        .btn-clear {
+            background: linear-gradient(135deg, #f97316, #ef4444);
+            box-shadow: 0 0 15px rgba(249, 115, 22, 0.3);
+        }
+
+        .btn-check {
+            background: var(--btn-gradient);
+            box-shadow: var(--glow-pink);
+        }
     </style>
 </head>
 
@@ -498,6 +809,14 @@
         </div>
 
         <button class="btn-sound" id="btn-sound" title="Toggle Sound">🔊</button>
+        <div class="mode-buttons">
+            <button class="btn-mode" id="btn-mode" title="Challenge Mode">
+                <span class="mode-icon">✏️</span> Challenge
+            </button>
+            <button class="btn-mode" id="btn-draw-mode" title="Draw Mode">
+                <span class="mode-icon">🖌️</span> Draw
+            </button>
+        </div>
 
         <div class="overall-progress" id="overall-progress">
             <div class="overall-progress-fill" id="overall-progress-fill"></div>
@@ -536,6 +855,52 @@
     <!-- Group transition flash -->
     <div class="group-flash" id="group-flash">
         <div class="group-flash-text" id="group-flash-text">⭐ Great! Next group!</div>
+    </div>
+
+    <!-- Challenge Mode Overlay -->
+    <div id="challenge-overlay">
+        <div class="challenge-progress" id="challenge-progress">1 / 28</div>
+        <div class="challenge-progress-bar">
+            <div class="challenge-progress-fill" id="challenge-progress-fill"></div>
+        </div>
+        <div class="challenge-prompt">
+            <div class="challenge-prompt-label">Which letter is this? 🤔</div>
+            <button class="challenge-listen-btn" id="challenge-listen-btn">🔊 Listen</button>
+        </div>
+        <div class="challenge-feedback" id="challenge-feedback"></div>
+        <div class="challenge-choices" id="challenge-choices"></div>
+        <button class="btn btn-tap" id="btn-exit-challenge"
+            style="margin-top: clamp(16px,4vw,28px); pointer-events:auto;">
+            <span class="btn-emoji">🎲</span> Back to Explore
+        </button>
+    </div>
+
+    <!-- Draw Mode Overlay -->
+    <div id="draw-overlay">
+        <div class="challenge-progress" id="draw-progress">1 / 28</div>
+        <div class="challenge-progress-bar">
+            <div class="challenge-progress-fill" id="draw-progress-fill"></div>
+        </div>
+        <div class="draw-prompt">
+            <div class="draw-prompt-label">Draw this letter ✍️</div>
+            <div class="draw-prompt-name" id="draw-prompt-name">Alif</div>
+        </div>
+        <div class="draw-canvas-container">
+            <div class="draw-reference" id="draw-reference">ا</div>
+            <canvas id="draw-canvas" width="300" height="300"></canvas>
+        </div>
+        <div class="challenge-feedback" id="draw-feedback"></div>
+        <div class="draw-toolbar">
+            <button class="btn btn-clear" id="btn-draw-clear">
+                <span class="btn-emoji">🗑️</span> Clear
+            </button>
+            <button class="btn btn-check" id="btn-draw-check">
+                <span class="btn-emoji">✅</span> Check
+            </button>
+        </div>
+        <button class="btn btn-tap" id="btn-exit-draw" style="margin-top: clamp(12px,3vw,20px); pointer-events:auto;">
+            <span class="btn-emoji">🎲</span> Back to Explore
+        </button>
     </div>
 
     <!-- Floating Stars -->
@@ -818,6 +1183,25 @@
                 gain.connect(this.masterGain);
                 osc.start(t);
                 osc.stop(t + 0.08);
+            }
+
+            // --- Error buzz (wrong answer) ---
+            playBuzz() {
+                if (!this.ctx || this.muted) return;
+                this._ensureResumed();
+                const t = this.ctx.currentTime;
+
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(150, t);
+                osc.frequency.linearRampToValueAtTime(100, t + 0.25);
+                gain.gain.setValueAtTime(0.2, t);
+                gain.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
+                osc.connect(gain);
+                gain.connect(this.masterGain);
+                osc.start(t);
+                osc.stop(t + 0.3);
             }
 
             // --- Background music (gentle looping melody) ---
@@ -1546,6 +1930,31 @@
                 this.soundManager = new SoundManager();
                 this.soundManager._preloadVoices();
 
+                // Challenge mode state
+                this.challengeMode = false;
+                this.challengeIndex = 0;
+                this.challengeOverlay = document.getElementById('challenge-overlay');
+                this.challengeProgressEl = document.getElementById('challenge-progress');
+                this.challengeProgressFill = document.getElementById('challenge-progress-fill');
+                this.challengePromptName = document.getElementById('challenge-prompt-name');
+                this.challengeFeedback = document.getElementById('challenge-feedback');
+                this.challengeChoicesEl = document.getElementById('challenge-choices');
+                this.challengeLocked = false;
+
+                // Draw mode state
+                this.drawMode = false;
+                this.drawIndex = 0;
+                this.drawOverlay = document.getElementById('draw-overlay');
+                this.drawProgressEl = document.getElementById('draw-progress');
+                this.drawProgressFill = document.getElementById('draw-progress-fill');
+                this.drawPromptName = document.getElementById('draw-prompt-name');
+                this.drawReference = document.getElementById('draw-reference');
+                this.drawFeedback = document.getElementById('draw-feedback');
+                this.drawCanvas = document.getElementById('draw-canvas');
+                this.drawCtx = this.drawCanvas.getContext('2d');
+                this.isDrawing = false;
+                this.drawLocked = false;
+
                 this._init();
             }
 
@@ -1867,6 +2276,52 @@
                         this.soundManager.stopBgMusic();
                     }
                 });
+
+                // Challenge mode toggle
+                document.getElementById('btn-mode').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.soundManager.init();
+                    this._startChallenge();
+                });
+                document.getElementById('btn-exit-challenge').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this._exitChallenge();
+                });
+                document.getElementById('challenge-listen-btn').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.soundManager.init();
+                    const letter = ALL_HIJAIYAH[this.challengeIndex];
+                    if (letter) this.soundManager.playLetterVoice(letter);
+                });
+
+                // Draw mode toggle
+                document.getElementById('btn-draw-mode').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.soundManager.init();
+                    this._startDraw();
+                });
+                document.getElementById('btn-exit-draw').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this._exitDraw();
+                });
+                document.getElementById('btn-draw-clear').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this._clearDrawCanvas();
+                });
+                document.getElementById('btn-draw-check').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this._checkDrawing();
+                });
+
+                // Drawing canvas events
+                const dc = this.drawCanvas;
+                dc.addEventListener('mousedown', (e) => this._onDrawStart(e));
+                dc.addEventListener('mousemove', (e) => this._onDrawMove(e));
+                dc.addEventListener('mouseup', () => this._onDrawEnd());
+                dc.addEventListener('mouseleave', () => this._onDrawEnd());
+                dc.addEventListener('touchstart', (e) => { e.preventDefault(); this._onDrawStart(e.touches[0]); }, { passive: false });
+                dc.addEventListener('touchmove', (e) => { e.preventDefault(); this._onDrawMove(e.touches[0]); }, { passive: false });
+                dc.addEventListener('touchend', (e) => { e.preventDefault(); this._onDrawEnd(); }, { passive: false });
             }
 
             _onPointerDown(event) {
@@ -2007,6 +2462,297 @@
                 this._updateOverallProgress();
                 this.soundManager.playClick();
                 this.soundManager.startBgMusic();
+            }
+
+            // ==========================================
+            // CHALLENGE MODE
+            // ==========================================
+            _startChallenge() {
+                this.challengeMode = true;
+                this.challengeIndex = 0;
+                this.challengeOverlay.classList.add('show');
+                this.soundManager.playSparkle();
+                this._loadChallengeQuestion(0);
+
+                // Update mode button
+                const btn = document.getElementById('btn-mode');
+                btn.innerHTML = '<span class="mode-icon">🎲</span> Explore';
+            }
+
+            _exitChallenge() {
+                this.challengeMode = false;
+                this.challengeOverlay.classList.remove('show');
+                this.challengeFeedback.textContent = '';
+                this.challengeFeedback.className = 'challenge-feedback';
+                this.soundManager.playClick();
+
+                // Restore mode button
+                const btn = document.getElementById('btn-mode');
+                btn.innerHTML = '<span class="mode-icon">✏️</span> Challenge';
+            }
+
+            _loadChallengeQuestion(index) {
+                this.challengeIndex = index;
+                this.challengeLocked = false;
+                const letter = ALL_HIJAIYAH[index];
+
+                // Update progress
+                this.challengeProgressEl.textContent = `${index + 1} / ${ALL_HIJAIYAH.length}`;
+                this.challengeProgressFill.style.width = `${(index / ALL_HIJAIYAH.length) * 100}%`;
+
+                // Clear feedback
+                this.challengeFeedback.textContent = '';
+                this.challengeFeedback.className = 'challenge-feedback';
+
+                // Generate 4 choices (1 correct + 3 random wrong)
+                const wrongPool = ALL_HIJAIYAH.filter((_, i) => i !== index);
+                const shuffled = wrongPool.sort(() => Math.random() - 0.5);
+                const choices = [letter, shuffled[0], shuffled[1], shuffled[2]];
+                // Shuffle choices
+                for (let i = choices.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [choices[i], choices[j]] = [choices[j], choices[i]];
+                }
+
+                // Render choice buttons
+                this.challengeChoicesEl.innerHTML = '';
+                choices.forEach(ch => {
+                    const btn = document.createElement('div');
+                    btn.className = 'challenge-choice';
+                    btn.textContent = ch.arabic;
+                    btn.dataset.name = ch.name;
+                    btn.addEventListener('click', () => this._onChallengeAnswer(btn, ch, letter));
+                    this.challengeChoicesEl.appendChild(btn);
+                });
+            }
+
+            _onChallengeAnswer(btn, chosen, correct) {
+                if (this.challengeLocked) return;
+
+                if (chosen === correct) {
+                    // ✅ CORRECT
+                    this.challengeLocked = true;
+                    btn.classList.add('correct-flash');
+                    this.challengeFeedback.textContent = '✅ Kamu benar, ayo lanjut!';
+                    this.challengeFeedback.className = 'challenge-feedback correct';
+                    this.soundManager.playSparkle();
+                    this.soundManager.playLetterVoice(correct);
+
+                    // Auto-advance after 1.5s
+                    setTimeout(() => {
+                        if (this.challengeIndex < ALL_HIJAIYAH.length - 1) {
+                            this._loadChallengeQuestion(this.challengeIndex + 1);
+                        } else {
+                            this._challengeComplete();
+                        }
+                    }, 1500);
+                } else {
+                    // ❌ WRONG
+                    btn.classList.add('wrong-flash');
+                    this.challengeFeedback.textContent = '❌ Kamu salah, ayo coba lagi!';
+                    this.challengeFeedback.className = 'challenge-feedback wrong';
+                    this.soundManager.playBuzz();
+
+                    // Remove shake class after animation
+                    setTimeout(() => btn.classList.remove('wrong-flash'), 500);
+                }
+            }
+
+            _challengeComplete() {
+                this.challengeOverlay.classList.remove('show');
+                this.challengeProgressFill.style.width = '100%';
+
+                // Show celebration with different text
+                this.celebrationText.innerHTML = '🌟 Amazing! 🌟<br>You completed all 28 letters!';
+                this.celebration.classList.add('show');
+                this.soundManager.playCelebration();
+
+                for (let i = 0; i < 5; i++) {
+                    setTimeout(() => {
+                        this.particleSystem.burst(
+                            new THREE.Vector3(
+                                (Math.random() - 0.5) * 4,
+                                2 + Math.random() * 2,
+                                (Math.random() - 0.5) * 4
+                            )
+                        );
+                    }, i * 250);
+                }
+
+                // Restore mode button and state
+                this.challengeMode = false;
+                const modeBtn = document.getElementById('btn-mode');
+                modeBtn.innerHTML = '<span class="mode-icon">✏️</span> Challenge';
+            }
+
+            // ==========================================
+            // DRAW MODE
+            // ==========================================
+            _startDraw() {
+                this.drawMode = true;
+                this.drawIndex = 0;
+                this.drawOverlay.classList.add('show');
+                this.soundManager.playSparkle();
+                this._loadDrawQuestion(0);
+            }
+
+            _exitDraw() {
+                this.drawMode = false;
+                this.drawOverlay.classList.remove('show');
+                this.drawFeedback.textContent = '';
+                this.drawFeedback.className = 'challenge-feedback';
+                this.soundManager.playClick();
+            }
+
+            _loadDrawQuestion(index) {
+                this.drawIndex = index;
+                this.drawLocked = false;
+                const letter = ALL_HIJAIYAH[index];
+
+                // Progress
+                this.drawProgressEl.textContent = `${index + 1} / ${ALL_HIJAIYAH.length}`;
+                this.drawProgressFill.style.width = `${(index / ALL_HIJAIYAH.length) * 100}%`;
+
+                // Prompt
+                this.drawPromptName.textContent = letter.name;
+                this.drawReference.textContent = letter.arabic;
+
+                // Clear feedback
+                this.drawFeedback.textContent = '';
+                this.drawFeedback.className = 'challenge-feedback';
+
+                // Clear canvas
+                this._clearDrawCanvas();
+            }
+
+            _clearDrawCanvas() {
+                const c = this.drawCanvas;
+                const ctx = this.drawCtx;
+                ctx.clearRect(0, 0, c.width, c.height);
+                // White background
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, c.width, c.height);
+            }
+
+            _onDrawStart(e) {
+                if (this.drawLocked) return;
+                this.isDrawing = true;
+                const rect = this.drawCanvas.getBoundingClientRect();
+                const scaleX = this.drawCanvas.width / rect.width;
+                const scaleY = this.drawCanvas.height / rect.height;
+                const x = (e.clientX - rect.left) * scaleX;
+                const y = (e.clientY - rect.top) * scaleY;
+                this.drawCtx.beginPath();
+                this.drawCtx.moveTo(x, y);
+                this.drawCtx.lineWidth = 12;
+                this.drawCtx.lineCap = 'round';
+                this.drawCtx.lineJoin = 'round';
+                this.drawCtx.strokeStyle = '#7c3aed';
+            }
+
+            _onDrawMove(e) {
+                if (!this.isDrawing || this.drawLocked) return;
+                const rect = this.drawCanvas.getBoundingClientRect();
+                const scaleX = this.drawCanvas.width / rect.width;
+                const scaleY = this.drawCanvas.height / rect.height;
+                const x = (e.clientX - rect.left) * scaleX;
+                const y = (e.clientY - rect.top) * scaleY;
+                this.drawCtx.lineTo(x, y);
+                this.drawCtx.stroke();
+            }
+
+            _onDrawEnd() {
+                this.isDrawing = false;
+            }
+
+            _checkDrawing() {
+                if (this.drawLocked) return;
+                const letter = ALL_HIJAIYAH[this.drawIndex];
+
+                // 1. Render template of the target letter
+                const size = this.drawCanvas.width; // 300
+                const tplCanvas = document.createElement('canvas');
+                tplCanvas.width = size;
+                tplCanvas.height = size;
+                const tplCtx = tplCanvas.getContext('2d');
+                tplCtx.fillStyle = '#ffffff';
+                tplCtx.fillRect(0, 0, size, size);
+                tplCtx.fillStyle = '#000000';
+                tplCtx.font = `bold ${size * 0.7}px "Arial", "Noto Sans Arabic", sans-serif`;
+                tplCtx.textAlign = 'center';
+                tplCtx.textBaseline = 'middle';
+                tplCtx.fillText(letter.arabic, size / 2, size / 2);
+
+                // 2. Get pixel data from both canvases
+                const tplData = tplCtx.getImageData(0, 0, size, size).data;
+                const usrData = this.drawCtx.getImageData(0, 0, size, size).data;
+
+                // 3. Compare: count template ink pixels and how many the user covered
+                let templateInk = 0;
+                let overlapInk = 0;
+                let userInk = 0;
+                const threshold = 200; // pixel brightness < 200 = "ink"
+
+                for (let i = 0; i < tplData.length; i += 4) {
+                    const tplBright = (tplData[i] + tplData[i + 1] + tplData[i + 2]) / 3;
+                    const usrBright = (usrData[i] + usrData[i + 1] + usrData[i + 2]) / 3;
+                    const tplIsInk = tplBright < threshold;
+                    const usrIsInk = usrBright < threshold;
+
+                    if (tplIsInk) templateInk++;
+                    if (usrIsInk) userInk++;
+                    if (tplIsInk && usrIsInk) overlapInk++;
+                }
+
+                // 4. Calculate score — overlap relative to template, penalise excess ink
+                const coverage = templateInk > 0 ? overlapInk / templateInk : 0;
+                const precision = userInk > 0 ? overlapInk / userInk : 0;
+                const score = (coverage * 0.7) + (precision * 0.3);
+
+                if (score >= 0.35) {
+                    // ✅ CORRECT
+                    this.drawLocked = true;
+                    this.drawFeedback.textContent = '✅ Kamu benar, ayo lanjut!';
+                    this.drawFeedback.className = 'challenge-feedback correct';
+                    this.soundManager.playSparkle();
+                    this.soundManager.playLetterVoice(letter);
+
+                    setTimeout(() => {
+                        if (this.drawIndex < ALL_HIJAIYAH.length - 1) {
+                            this._loadDrawQuestion(this.drawIndex + 1);
+                        } else {
+                            this._drawComplete();
+                        }
+                    }, 1500);
+                } else {
+                    // ❌ WRONG
+                    this.drawFeedback.textContent = '❌ Kamu salah, ayo coba lagi!';
+                    this.drawFeedback.className = 'challenge-feedback wrong';
+                    this.soundManager.playBuzz();
+                }
+            }
+
+            _drawComplete() {
+                this.drawOverlay.classList.remove('show');
+                this.drawProgressFill.style.width = '100%';
+
+                this.celebrationText.innerHTML = '🌟 Amazing! 🌟<br>You drew all 28 letters!';
+                this.celebration.classList.add('show');
+                this.soundManager.playCelebration();
+
+                for (let i = 0; i < 5; i++) {
+                    setTimeout(() => {
+                        this.particleSystem.burst(
+                            new THREE.Vector3(
+                                (Math.random() - 0.5) * 4,
+                                2 + Math.random() * 2,
+                                (Math.random() - 0.5) * 4
+                            )
+                        );
+                    }, i * 250);
+                }
+
+                this.drawMode = false;
             }
 
             _onResize() {
