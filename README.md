@@ -1,0 +1,88 @@
+# ✨ Magical Hijaiyah Cube
+
+An interactive 3D educational game to learn **all 28 Hijaiyah (Arabic alphabet)** letters — designed for toddlers.
+
+![Preview](https://img.shields.io/badge/Letters-28%20Hijaiyah-purple) ![Status](https://img.shields.io/badge/Status-Production-green) ![Type](https://img.shields.io/badge/Type-Standalone%20HTML-blue)
+
+## 🎮 Features
+
+- **3D Interactive Cube** — Rounded cube with Hijaiyah letters on each face (Three.js)
+- **All 28 Letters** — Organized in 5 groups of 6 (last group: 4 letters + decorative faces)
+- **Voice Pronunciation** — Tap the cube to hear each letter spoken in Arabic (Google TTS + Web Speech API fallback)
+- **Sound Effects** — Pop, whoosh, sparkle chimes, celebration fanfare, and background lullaby melody (Web Audio API)
+- **Smooth Animations** — Squash & stretch, rotation, particle bursts, and floating idle (GSAP)
+- **Toddler-Friendly UI** — Large buttons, pastel colors, progress dots, and celebration overlay
+- **Auto Group Progression** — Complete a group → brief celebration → automatically loads the next group
+- **100% Standalone** — Single `index.html` file, no build step, no external assets
+- **Responsive** — Works on mobile, tablet, and desktop
+
+## 🚀 Quick Start
+
+### Option 1: Open Directly
+```bash
+open index.html
+```
+> Just double-click `index.html` in your file manager — it works in any modern browser!
+
+### Option 2: Local Server (recommended for audio)
+```bash
+npx serve .
+```
+
+## 📦 Deploy
+
+### Vercel
+```bash
+# Install Vercel CLI
+npm i -g vercel
+
+# Deploy (from project directory)
+vercel
+```
+
+### Netlify
+```bash
+# Install Netlify CLI
+npm i -g netlify-cli
+
+# Deploy (from project directory)
+netlify deploy --prod --dir .
+```
+
+### GitHub Pages
+1. Push this repo to GitHub
+2. Go to **Settings → Pages**
+3. Set source to **main branch** / root
+4. Your site will be live at `https://<username>.github.io/<repo-name>`
+
+## 🗂️ Project Structure
+
+```
+magical-hijaiyah-cube/
+├── index.html    ← The entire game (single file, ~1900 lines)
+└── README.md     ← You are here
+```
+
+## 🔤 Letter Groups
+
+| Group | Letters | Range |
+|:-----:|---------|-------|
+| 1 | ا ب ت ث ج ح | Alif – Ha |
+| 2 | خ د ذ ر ز س | Kha – Sin |
+| 3 | ش ص ض ط ظ ع | Syin – 'Ain |
+| 4 | غ ف ق ك ل م | Ghain – Mim |
+| 5 | ن و ه ي | Nun – Ya |
+
+## 🛠️ Tech Stack
+
+| Tech | Usage |
+|------|-------|
+| [Three.js](https://threejs.org/) v0.160.0 | 3D rendering, raycasting, materials |
+| [GSAP](https://greensock.com/gsap/) v3.12.5 | Animations (squash, rotation, particles) |
+| Web Audio API | Synthesized SFX & background music |
+| HTML5 Canvas | Dynamic texture generation |
+| Google TTS / Web Speech API | Arabic letter pronunciation |
+
+## 📄 License
+
+MIT
