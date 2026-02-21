@@ -893,6 +893,23 @@
             }
 
             // --- Hijaiyah letter voice pronunciation ---
+            // Detect iOS for special handling
+            get _isIOS() {
+                return /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+                    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+            }
+
+            // Pre-load speech synthesis voices
+            _preloadVoices() {
+                if (!window.speechSynthesis) return;
+                this._voices = speechSynthesis.getVoices();
+                if (this._voices.length === 0) {
+                    speechSynthesis.addEventListener('voiceschanged', () => {
+                        this._voices = speechSynthesis.getVoices();
+                    }, { once: true });
+                }
+            }
+
             playLetterVoice(letter) {
                 if (this.muted) return;
 
@@ -908,10 +925,17 @@
 
                 const voiceText = letter.voice || letter.arabic;
 
-                // Try Google Translate TTS streaming first (better quality)
+                // iOS Safari: Google TTS is blocked by CORS/autoplay.
+                // Use Web Speech API directly (must be called synchronously
+                // from user gesture — no setTimeout!).
+                if (this._isIOS) {
+                    this._speakWithSpeechAPI(voiceText);
+                    return;
+                }
+
+                // Desktop/Android: try Google TTS first, fallback to Speech API
                 this._tryGoogleTTS(voiceText)
                     .catch(() => {
-                        // Fallback to Web Speech API
                         this._speakWithSpeechAPI(voiceText);
                     });
             }
@@ -964,7 +988,7 @@
                 utter.volume = this.muted ? 0 : 0.9;
 
                 // Try to find Arabic voice
-                const voices = speechSynthesis.getVoices();
+                const voices = this._voices || speechSynthesis.getVoices();
                 const arVoice = voices.find(v => v.lang.startsWith('ar'));
                 if (arVoice) utter.voice = arVoice;
 
@@ -1520,6 +1544,7 @@
 
                 // Sound
                 this.soundManager = new SoundManager();
+                this.soundManager._preloadVoices();
 
                 this._init();
             }
@@ -1869,12 +1894,23 @@
                 // Particle burst at hit point
                 this.particleSystem.burst(hitPoint);
 
-                // Sound: pop + sparkle + letter voice (voice on tap only)
+                const currentLetter = this.groupLetters[this.currentIndex];
+
+                // iOS Safari: voice MUST be called synchronously from user gesture.
+                // On iOS, speak immediately (no setTimeout).
+                // On desktop, delay 350ms so voice doesn't clash with pop SFX.
+                const isIOS = this.soundManager._isIOS;
+
                 this.soundManager.playPop();
                 setTimeout(() => this.soundManager.playSparkle(), 120);
-                const currentLetter = this.groupLetters[this.currentIndex];
+
                 if (currentLetter) {
-                    setTimeout(() => this.soundManager.playLetterVoice(currentLetter), 350);
+                    if (isIOS) {
+                        // Synchronous call within gesture — required by iOS
+                        this.soundManager.playLetterVoice(currentLetter);
+                    } else {
+                        setTimeout(() => this.soundManager.playLetterVoice(currentLetter), 350);
+                    }
                 }
 
                 // Show letter display with pop
