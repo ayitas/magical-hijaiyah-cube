@@ -1420,6 +1420,13 @@
                 this.masterGain = this.ctx.createGain();
                 this.masterGain.gain.value = 0.5;
                 this.masterGain.connect(this.ctx.destination);
+
+                // Unlock SpeechSynthesis on iOS
+                if (this._isIOS && window.speechSynthesis) {
+                    const unlockUtterance = new SpeechSynthesisUtterance('');
+                    unlockUtterance.volume = 0;
+                    window.speechSynthesis.speak(unlockUtterance);
+                }
             }
 
             // Ensure AudioContext is resumed (browsers require user gesture)
@@ -1704,7 +1711,7 @@
                 if (this.muted) return;
 
                 // Cancel any ongoing speech
-                if (window.speechSynthesis) {
+                if (window.speechSynthesis && window.speechSynthesis.speaking) {
                     window.speechSynthesis.cancel();
                 }
                 // Stop any previous audio
