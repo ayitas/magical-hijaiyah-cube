@@ -29,9 +29,9 @@ Listen to each letter's pronunciation and pick the correct Arabic letter from 4 
 Practice writing Hijaiyah letters! A faded reference letter guides your strokes on the canvas. The app uses pixel-based template matching to validate your drawing — get ≥35% match to advance to the next letter.
 
 ### 🧺 Sort Mode
-A drag-and-drop mini-game where all 28 Hijaiyah letters grow as apples on a beautiful, realistically-scaled tree. Drag each apple into the correct group basket based on the displayed Arabic alphabet legend. Features snap-back validation on wrong drops and satisfying sound effects.
+A drag-and-drop mini-game where all 28 Hijaiyah letters appear as apples falling into the grass in batches. Drag each apple into the correct group tree (1 of 5) based on the matching shadow hints and the interactive Hijaiyah Dictionary (Legend). Features batched apple spawning, snap-to-shadow validation on correct drops, bounce-back on wrong drops, and satisfying sound effects.
 
-> Feedback messages are in Indonesian: **"Kamu benar, ayo lanjut!"** (correct) / **"Kamu salah, ayo coba lagi!"** (wrong) / **"Buah ini bukan di keranjang yang tepat!"** (wrong sort)
+> Feedback messages are in Indonesian: **"Kamu benar, ayo lanjut!"** (correct) / **"Kamu salah, ayo coba lagi!"** (wrong) / **"Buah ini bukan di pohon yang tepat!"** (wrong sort)
 
 ## 🚀 Quick Start
 
