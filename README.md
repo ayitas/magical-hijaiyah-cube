@@ -13,7 +13,7 @@ An interactive 3D educational game to learn **all 28 Hijaiyah (Arabic alphabet)*
 - **Smooth Animations** — Squash & stretch, rotation, particle bursts, and floating idle (GSAP)
 - **Toddler-Friendly UI** — Large buttons, pastel colors, progress dots, and celebration overlay
 - **Auto Group Progression** — Complete a group → brief celebration → automatically loads the next group
-- **4 Interactive Game Modes** — Explore, Challenge, Draw, and Sort
+- **5 Interactive Game Modes** — Explore, Challenge, Draw, Sort, and Puzzle
 - **100% Standalone** — Single `index.html` file (plus one image), no build step
 - **Responsive** — Works beautifully on mobile, tablet, and desktop
 
@@ -31,7 +31,10 @@ Practice writing Hijaiyah letters! A faded reference letter guides your strokes 
 ### 🧺 Sort Mode
 A drag-and-drop mini-game where all 28 Hijaiyah letters appear as apples falling into the grass in batches. Drag each apple into the correct group tree (1 of 5) based on the matching shadow hints and the interactive Hijaiyah Dictionary (Legend). Features batched apple spawning, snap-to-shadow validation on correct drops, bounce-back on wrong drops, and satisfying sound effects.
 
-> Feedback messages are in Indonesian: **"Kamu benar, ayo lanjut!"** (correct) / **"Kamu salah, ayo coba lagi!"** (wrong) / **"Buah ini bukan di pohon yang tepat!"** (wrong sort)
+> Feedback messages are in Indonesian: **"Kamu benar, ayo lanjut!"** (correct) / **"Kamu salah, ayo coba lagi!"** (wrong) / **"Buah ini bukan di tempatnya!"** (wrong sort)
+
+### 🧩 Puzzle Mode
+An immersive 3D isometric puzzle board where you drop scattered letter tiles into their matching slots. Complete a group of 6 letters to automatically progress to the next group, accompanied by celebrations and particle effects.
 
 ## 🚀 Quick Start
 

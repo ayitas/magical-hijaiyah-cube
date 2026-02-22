@@ -476,14 +476,54 @@
         }
 
         /* ===== MODE TOGGLE ===== */
-        .mode-buttons {
+        .mode-dropdown {
             position: absolute;
             top: clamp(12px, 3vw, 24px);
             left: clamp(62px, 10vw, 90px);
-            display: flex;
-            gap: 6px;
-            pointer-events: auto;
             z-index: 20;
+            pointer-events: auto;
+        }
+
+        .mode-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            margin-top: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(8px);
+            padding: 8px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .mode-menu.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .mode-menu .btn-mode {
+            width: 100%;
+            justify-content: flex-start;
+            height: clamp(36px, 5vw, 48px);
+        }
+
+        .dropdown-arrow {
+            font-size: 0.8em;
+            margin-left: 4px;
+            transition: transform 0.3s ease;
+            display: inline-block;
+        }
+
+        .mode-dropdown.open .dropdown-arrow {
+            transform: rotate(180deg);
         }
 
         .btn-mode {
@@ -1125,6 +1165,7 @@
             color: #991b1b;
         }
 
+        /* Sort Bottom Bar */
         .sort-bottom-bar {
             display: flex;
             align-items: center;
@@ -1132,6 +1173,196 @@
             padding-bottom: clamp(8px, 2vw, 14px);
             z-index: 2;
             flex-shrink: 0;
+        }
+
+        /* ===== PUZZLE MODE ===== */
+        #puzzle-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 40;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: linear-gradient(180deg, #ffedd5 0%, #fed7aa 100%);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+            overflow: hidden;
+            perspective: 1200px;
+        }
+
+        #puzzle-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .puzzle-header {
+            width: 100%;
+            text-align: center;
+            padding: clamp(12px, 3vw, 24px) 0 0;
+            z-index: 10;
+        }
+
+        .puzzle-board-container {
+            position: relative;
+            flex: 1;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform-style: preserve-3d;
+            margin-bottom: 20vh;
+            /* Push up away from the bottom bar even more */
+            margin-top: 4vh;
+            /* Push down a bit from header */
+        }
+
+        /* 3D Isometric Board */
+        .puzzle-board {
+            position: relative;
+            width: clamp(280px, 85vw, 600px);
+            aspect-ratio: 4 / 3;
+            background: #d97706;
+            border-radius: 12px;
+            transform: rotateX(55deg) rotateZ(-35deg);
+            transform-style: preserve-3d;
+            box-shadow:
+                -4px 4px 0 #b45309,
+                -8px 8px 0 #92400e,
+                -12px 12px 20px rgba(0, 0, 0, 0.4);
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 5%;
+            padding: 5%;
+        }
+
+        /* Fake thickness side panels for 3D realism */
+        .puzzle-board::before {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            /* Same as Z offset from drop shadow */
+            left: 0;
+            width: 100%;
+            height: 15px;
+            background: #b45309;
+            transform-origin: top;
+            transform: rotateX(-90deg);
+        }
+
+        .puzzle-board::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -15px;
+            width: 15px;
+            height: 100%;
+            background: #92400e;
+            transform-origin: right;
+            transform: rotateY(-90deg);
+        }
+
+        .puzzle-slot {
+            position: relative;
+            background: #fcd34d;
+            border-radius: 12px;
+            box-shadow: inset 3px 3px 8px rgba(0, 0, 0, 0.2), inset -2px -2px 5px rgba(255, 255, 255, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .puzzle-slot-shadow {
+            font-size: clamp(2rem, 6vw, 4rem);
+            font-weight: 700;
+            color: #d97706;
+            opacity: 0.3;
+        }
+
+        /* Puzzle scatter area (instead of tray) */
+        .puzzle-scatter-area {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            /* Let drag events pass through to pieces */
+            z-index: 50;
+        }
+
+        .puzzle-piece {
+            position: absolute;
+            width: clamp(50px, 12vw, 80px);
+            height: clamp(50px, 12vw, 80px);
+            background: linear-gradient(135deg, #34d399, #10b981);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: clamp(1.8rem, 5vw, 3rem);
+            font-weight: 700;
+            color: #fff;
+            cursor: grab;
+            user-select: none;
+            touch-action: none;
+            z-index: 100;
+            pointer-events: auto;
+            /* Re-enable pointer events for pieces */
+            transform-style: preserve-3d;
+            box-shadow: 0 4px 0 #059669, 0 8px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.1s;
+        }
+
+        .puzzle-piece::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 12px;
+            box-shadow: inset 2px 2px 5px rgba(255, 255, 255, 0.4), inset -2px -2px 5px rgba(0, 0, 0, 0.2);
+            pointer-events: none;
+        }
+
+        .puzzle-piece:active,
+        .puzzle-piece.dragging {
+            cursor: grabbing;
+            box-shadow: 0 8px 0 #059669, 0 16px 25px rgba(0, 0, 0, 0.3);
+            /* Compensate pop up for shadow */
+            transform: translateY(-4px) scale(1.05);
+        }
+
+        .puzzle-piece.dragging {
+            transition: none;
+        }
+
+        /* Sorted piece snaps to 3D board */
+        .puzzle-piece.sorted {
+            pointer-events: none;
+            transform: translateZ(8px) !important;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3) !important;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+        }
+
+        @keyframes wrong-shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            20% {
+                transform: translateX(-10px);
+            }
+
+            40% {
+                transform: translateX(10px);
+            }
+
+            60% {
+                transform: translateX(-8px);
+            }
+
+            80% {
+                transform: translateX(6px);
+            }
         }
 
         @keyframes apple-bounce {
@@ -1175,16 +1406,24 @@
         </div>
 
         <button class="btn-sound" id="btn-sound" title="Toggle Sound">🔊</button>
-        <div class="mode-buttons">
-            <button class="btn-mode" id="btn-mode" title="Challenge Mode">
-                <span class="mode-icon">✏️</span> Challenge
+        <div class="mode-dropdown" id="mode-dropdown">
+            <button class="btn-mode" id="btn-modes-toggle" title="Play Modes">
+                <span class="mode-icon">🎮</span> Modes <span class="dropdown-arrow">▼</span>
             </button>
-            <button class="btn-mode" id="btn-draw-mode" title="Draw Mode">
-                <span class="mode-icon">🖌️</span> Draw
-            </button>
-            <button class="btn-mode" id="btn-sort-mode" title="Sort Mode">
-                <span class="mode-icon">🧺</span> Sort
-            </button>
+            <div class="mode-menu" id="mode-menu">
+                <button class="btn-mode" id="btn-challenge-mode" title="Challenge Mode">
+                    <span class="mode-icon">✏️</span> Challenge
+                </button>
+                <button class="btn-mode" id="btn-draw-mode" title="Draw Mode">
+                    <span class="mode-icon">🖌️</span> Draw
+                </button>
+                <button class="btn-mode" id="btn-sort-mode" title="Sort Mode">
+                    <span class="mode-icon">🧺</span> Sort
+                </button>
+                <button class="btn-mode" id="btn-puzzle-mode" title="Puzzle Mode">
+                    <span class="mode-icon">🧩</span> Puzzle
+                </button>
+            </div>
         </div>
 
         <div class="overall-progress" id="overall-progress">
@@ -1309,6 +1548,31 @@
         </div>
     </div>
 
+    <!-- Puzzle Mode Overlay -->
+    <div id="puzzle-overlay">
+        <div class="puzzle-header">
+            <div class="challenge-progress" id="puzzle-progress">Group 1 / 5</div>
+            <div class="challenge-progress-bar" style="margin: 4px auto; width: min(240px, 55vw);">
+                <div class="challenge-progress-fill" id="puzzle-progress-fill"></div>
+            </div>
+            <div class="challenge-feedback" id="puzzle-feedback" style="margin-top: 8px;"></div>
+        </div>
+
+        <!-- 3D Isometric Board -->
+        <div class="puzzle-board-container" id="puzzle-board-container">
+            <div class="puzzle-board" id="puzzle-board"></div>
+            <!-- Scatter area for draggable pieces -->
+            <div class="puzzle-scatter-area" id="puzzle-scatter-area"></div>
+        </div>
+
+        <div class="sort-bottom-bar"
+            style="position: absolute; bottom: 0; width: 100%; justify-content: center; background: rgba(255,255,255,0.4); padding-top: 8px;">
+            <button class="btn btn-tap" id="btn-exit-puzzle" style="pointer-events:auto;">
+                <span class="btn-emoji">🎲</span> Back to Explore
+            </button>
+        </div>
+    </div>
+
     <!-- Floating Stars -->
     <div class="floating-star" style="top:10%;left:5%;animation-delay:0s">⭐</div>
     <div class="floating-star" style="top:20%;right:8%;animation-delay:1.5s">🌟</div>
@@ -1359,7 +1623,7 @@
             { arabic: '\u062d', name: 'Ha', voice: '\u062d\u064e\u0627\u0621\u0652' },
             // Group 2: خ - س
             { arabic: '\u062e', name: 'Kha', voice: '\u062e\u064e\u0627\u0621\u0652' },
-            { arabic: '\u062f', name: 'Dal', voice: '\u062f\u064e\u0627\u0644\u0652' },
+            { arabic: '\u062d', name: 'Dal', voice: '\u062f\u064e\u0627\u0644\u0652' },
             { arabic: '\u0630', name: 'Dzal', voice: '\u0630\u064e\u0627\u0644\u0652' },
             { arabic: '\u0631', name: 'Ra', voice: '\u0631\u064e\u0627\u0621\u0652' },
             { arabic: '\u0632', name: 'Zai', voice: '\u0632\u064e\u0627\u064a\u0652' },
@@ -2378,8 +2642,29 @@
                 this.sortFeedback = document.getElementById('sort-feedback');
                 this.sortedCount = 0;
                 this._dragApple = null;
-                this._dragOffsetX = 0;
-                this._dragOffsetY = 0;
+                this._dragOrigLeft = 0;
+                this._dragOrigTop = 0;
+
+                // Puzzle mode state
+                this.puzzleMode = false;
+                this.puzzleGroup = 0; // Current letter group chunks (chunks of 6)
+                this.puzzleOverlay = document.getElementById('puzzle-overlay');
+                this.puzzleBoardContainer = document.getElementById('puzzle-board-container');
+                this.puzzleBoard = document.getElementById('puzzle-board');
+                this.puzzleScatterArea = document.getElementById('puzzle-scatter-area');
+                this.puzzleProgressEl = document.getElementById('puzzle-progress');
+                this.puzzleProgressFill = document.getElementById('puzzle-progress-fill');
+                this.puzzleFeedback = document.getElementById('puzzle-feedback');
+                this.puzzledCount = 0;
+                this._dragPiece = null;
+                this._puzzlePieces = [];
+                this._dragStartX = 0;
+                this._dragStartY = 0;
+                this._boardRotX = 55;
+                this._boardRotZ = -35;
+                this._isDraggingBoard = false;
+                this._lastTouchX = 0;
+                this._lastTouchY = 0;
 
                 this._init();
             }
@@ -2703,8 +2988,30 @@
                     }
                 });
 
+                // Modes dropdown toggle
+                const modeDropdown = document.getElementById('mode-dropdown');
+                const modeMenu = document.getElementById('mode-menu');
+
+                document.getElementById('btn-modes-toggle').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.soundManager.init();
+                    this.soundManager.playClick();
+                    modeDropdown.classList.toggle('open');
+                    modeMenu.classList.toggle('show');
+                });
+
+                // Close dropdown when clicking outside or picking a mode
+                document.addEventListener('click', (e) => {
+                    if (modeMenu.classList.contains('show')) {
+                        if (!modeDropdown.contains(e.target) || e.target.closest('.btn-mode')) {
+                            modeDropdown.classList.remove('open');
+                            modeMenu.classList.remove('show');
+                        }
+                    }
+                });
+
                 // Challenge mode toggle
-                document.getElementById('btn-mode').addEventListener('click', (e) => {
+                document.getElementById('btn-challenge-mode').addEventListener('click', (e) => {
                     e.stopPropagation();
                     this.soundManager.init();
                     this._startChallenge();
@@ -2771,6 +3078,17 @@
                 document.getElementById('btn-exit-sort').addEventListener('click', (e) => {
                     e.stopPropagation();
                     this._exitSort();
+                });
+
+                // Puzzle mode toggle
+                document.getElementById('btn-puzzle-mode').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.soundManager.init();
+                    this._startPuzzle();
+                });
+                document.getElementById('btn-exit-puzzle').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this._exitPuzzle();
                 });
             }
 
@@ -2924,9 +3242,7 @@
                 this.soundManager.playSparkle();
                 this._loadChallengeQuestion(0);
 
-                // Update mode button
-                const btn = document.getElementById('btn-mode');
-                btn.innerHTML = '<span class="mode-icon">🎲</span> Explore';
+                // UI already has Back to Explore button
             }
 
             _exitChallenge() {
@@ -2936,9 +3252,7 @@
                 this.challengeFeedback.className = 'challenge-feedback';
                 this.soundManager.playClick();
 
-                // Restore mode button
-                const btn = document.getElementById('btn-mode');
-                btn.innerHTML = '<span class="mode-icon">✏️</span> Challenge';
+                // Exit challenge logic completed
             }
 
             _loadChallengeQuestion(index) {
@@ -3032,10 +3346,8 @@
                     }, i * 250);
                 }
 
-                // Restore mode button and state
+                // Restore state
                 this.challengeMode = false;
-                const modeBtn = document.getElementById('btn-mode');
-                modeBtn.innerHTML = '<span class="mode-icon">✏️</span> Challenge';
             }
 
             // ==========================================
@@ -3206,6 +3518,396 @@
                 }
 
                 this.drawMode = false;
+            }
+
+            // ==========================================
+            // PUZZLE MODE
+            // ==========================================
+            _startPuzzle() {
+                this.puzzleMode = true;
+                this.puzzleGroup = 0;
+                this.puzzleOverlay.classList.add('show');
+                this.soundManager.playSparkle();
+                this._renderPuzzleUI(0);
+            }
+
+            _exitPuzzle() {
+                this.puzzleMode = false;
+                this.puzzleOverlay.classList.remove('show');
+                this.soundManager.playClick();
+
+                // Cleanup event listeners
+                if (this._puzzleMoveHandler && this._puzzleEndHandler) {
+                    document.removeEventListener('mousemove', this._puzzleMoveHandler);
+                    document.removeEventListener('mouseup', this._puzzleEndHandler);
+                    document.removeEventListener('touchmove', this._puzzleMoveHandler);
+                    document.removeEventListener('touchend', this._puzzleEndHandler);
+                }
+            }
+
+            _updateBoardTransform() {
+                this.puzzleBoard.style.transform = `rotateX(${this._boardRotX}deg) rotateZ(${this._boardRotZ}deg)`;
+            }
+
+            _onBoardDrag(e) {
+                const deltaX = e.clientX - this._lastTouchX;
+                const deltaY = e.clientY - this._lastTouchY;
+
+                // Add rotation (reversed X/Y for intuitive dragging)
+                this._boardRotZ -= deltaX * 0.5;
+                this._boardRotX -= deltaY * 0.5;
+
+                // Clamp X rotation to keep it looking like a board on a table
+                this._boardRotX = Math.max(15, Math.min(85, this._boardRotX));
+
+                this._updateBoardTransform();
+
+                this._lastTouchX = e.clientX;
+                this._lastTouchY = e.clientY;
+            }
+
+            _renderPuzzleUI(groupIndex) {
+                this.puzzleGroup = groupIndex;
+                this.puzzledCount = 0;
+                const totalGroups = Math.ceil(ALL_HIJAIYAH.length / 6);
+
+                this.puzzleProgressEl.textContent = `Group ${groupIndex + 1} / ${totalGroups}`;
+                this.puzzleProgressFill.style.width = '0%';
+
+                this.puzzleFeedback.textContent = '';
+                this.puzzleFeedback.className = 'challenge-feedback';
+
+                // Grab 6 letters, or whatever is left
+                const letters = getGroupLetters(groupIndex);
+
+                // Setup 3D Board Slots
+                this.puzzleBoard.innerHTML = '';
+                letters.forEach((l, i) => {
+                    const slot = document.createElement('div');
+                    slot.className = 'puzzle-slot';
+                    slot.dataset.index = i; // Match index
+                    slot.innerHTML = `<div class="puzzle-slot-shadow">${l.arabic}</div>`;
+                    this.puzzleBoard.appendChild(slot);
+                });
+
+                // Reset board rotation
+                this._boardRotX = 55;
+                this._boardRotZ = -35;
+                this._updateBoardTransform();
+
+                // Setup scattered pieces
+                this.puzzleScatterArea.innerHTML = '';
+
+                // Shuffle pieces
+                const shuffled = letters.map((l, i) => ({ ...l, origIndex: i }));
+                for (let i = shuffled.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+                }
+
+                // Safe zones for scattering pieces (strict left and right sides only, avoiding bottom bar entirely)
+                // Pieces can be up to 12vw wide and 12vh high.
+                const safeZones = [
+                    { minX: 5, maxX: 15, minY: 15, maxY: 30 }, // Left high
+                    { minX: 75, maxX: 85, minY: 15, maxY: 30 }, // Right high
+                    { minX: 3, maxX: 13, minY: 32, maxY: 45 }, // Left mid
+                    { minX: 77, maxX: 87, minY: 32, maxY: 45 }, // Right mid
+                    { minX: 5, maxX: 15, minY: 47, maxY: 58 }, // Left low
+                    { minX: 75, maxX: 85, minY: 47, maxY: 58 }, // Right low
+                ];
+
+                shuffled.forEach((l, i) => {
+                    const piece = document.createElement('div');
+                    piece.className = 'puzzle-piece';
+                    piece.dataset.index = l.origIndex;
+                    piece.dataset.name = l.name;
+                    piece.textContent = l.arabic;
+
+                    // Assign colors based on matching palette mapping used elsewhere
+                    piece.style.background = `linear-gradient(135deg, ${l.bg}, ${l.color})`;
+                    piece.style.boxShadow = `0 4px 0 ${l.accent}, 0 8px 15px rgba(0,0,0,0.2)`;
+                    piece.style.color = l.accent;
+
+                    // Scatter loosely using safe strict zones
+                    const zone = safeZones[i % safeZones.length];
+                    const randX = zone.minX + Math.random() * (zone.maxX - zone.minX);
+                    const randY = zone.minY + Math.random() * (zone.maxY - zone.minY);
+
+                    piece.style.left = `calc(${randX}vw)`;
+                    piece.style.top = `calc(${randY}vh)`;
+
+                    // Add pop animation for each piece
+                    gsap.fromTo(piece,
+                        { scale: 0, rotation: Math.random() * 60 - 30 },
+                        { scale: 1, rotation: 0, duration: 0.5, ease: 'back.out(1.5)', delay: 0.2 + (i * 0.05) }
+                    );
+
+                    // Mouse / Touch handlers for dragging pieces
+                    piece.addEventListener('mousedown', (e) => this._onPieceDragStart(e, piece));
+                    piece.addEventListener('touchstart', (e) => {
+                        e.preventDefault();
+                        this._onPieceDragStart(e.touches[0], piece);
+                    }, { passive: false });
+
+                    this.puzzleScatterArea.appendChild(piece);
+                });
+
+                // Board dragging handlers
+                this.puzzleBoardContainer.addEventListener('mousedown', (e) => {
+                    if (e.target.closest('.puzzle-piece') || e.target.closest('.btn-exit-puzzle')) return;
+                    this._isDraggingBoard = true;
+                    this._lastTouchX = e.clientX;
+                    this._lastTouchY = e.clientY;
+                });
+
+                this.puzzleBoardContainer.addEventListener('touchstart', (e) => {
+                    if (e.target.closest('.puzzle-piece') || e.target.closest('.btn-exit-puzzle')) return;
+                    this._isDraggingBoard = true;
+                    this._lastTouchX = e.touches[0].clientX;
+                    this._lastTouchY = e.touches[0].clientY;
+                }, { passive: false });
+
+                // Global handlers for drag / drop over the entire screen
+                this._puzzleMoveHandler = (e) => {
+                    const ev = e.touches ? e.touches[0] : e;
+                    if (this._isDraggingBoard) {
+                        e.preventDefault();
+                        this._onBoardDrag(ev);
+                    } else if (this._dragPiece) {
+                        e.preventDefault();
+                        this._onPieceDrag(ev);
+                    }
+                };
+                this._puzzleEndHandler = (e) => {
+                    if (this._isDraggingBoard) {
+                        this._isDraggingBoard = false;
+                    }
+                    if (this._dragPiece) {
+                        const ev = e.changedTouches ? e.changedTouches[0] : e;
+                        this._onPieceDragEnd(ev);
+                    }
+                };
+
+                document.addEventListener('mousemove', this._puzzleMoveHandler);
+                document.addEventListener('mouseup', this._puzzleEndHandler);
+                document.addEventListener('touchmove', this._puzzleMoveHandler, { passive: false });
+                document.addEventListener('touchend', this._puzzleEndHandler);
+            }
+
+            _onPieceDragStart(e, piece) {
+                if (piece.classList.contains('sorted')) return;
+
+                this.soundManager.playClick();
+                this._dragPiece = piece;
+
+                // Make absolute to dragging layer
+                const rect = piece.getBoundingClientRect();
+
+                // Save original info to return if dropped wrong
+                this._dragPiece.dataset.origLeft = piece.style.left || 'auto';
+                this._dragPiece.dataset.origTop = piece.style.top || 'auto';
+                this._dragPiece.dataset.origParent = piece.parentElement.id;
+
+                // Move from flex tray to body for unconstrained dragging
+                document.body.appendChild(piece);
+
+                piece.style.position = 'fixed';
+                piece.style.margin = '0';
+                piece.style.left = rect.left + 'px';
+                piece.style.top = rect.top + 'px';
+
+                this._dragStartX = e.clientX - rect.left;
+                this._dragStartY = e.clientY - rect.top;
+
+                piece.classList.add('dragging');
+
+                if (this.soundManager._isIOS) {
+                    // Try to unlock audio in Safari
+                    this.soundManager.playPop();
+                }
+            }
+
+            _onPieceDrag(e) {
+                if (!this._dragPiece) return;
+                const piece = this._dragPiece;
+
+                const left = e.clientX - this._dragStartX;
+                const top = e.clientY - this._dragStartY;
+
+                piece.style.left = left + 'px';
+                piece.style.top = top + 'px';
+            }
+
+            _updateBoardTransform() {
+                this.puzzleBoard.style.transform = `rotateX(${this._boardRotX}deg) rotateZ(${this._boardRotZ}deg)`;
+            }
+
+            _onBoardDrag(e) {
+                const deltaX = e.clientX - this._lastTouchX;
+                const deltaY = e.clientY - this._lastTouchY;
+
+                // Add rotation (reversed X/Y for intuitive dragging)
+                this._boardRotZ -= deltaX * 0.5;
+                this._boardRotX -= deltaY * 0.5;
+
+                // Clamp X rotation to keep it looking like a board on a table
+                this._boardRotX = Math.max(15, Math.min(85, this._boardRotX));
+
+                this._updateBoardTransform();
+
+                this._lastTouchX = e.clientX;
+                this._lastTouchY = e.clientY;
+            }
+
+            _onPieceDragEnd(e) {
+                if (!this._dragPiece) return;
+                const piece = this._dragPiece;
+                this._dragPiece = null;
+                piece.classList.remove('dragging');
+
+                // Find center point of the piece
+                const pieceRect = piece.getBoundingClientRect();
+                const centerX = pieceRect.left + pieceRect.width / 2;
+                const centerY = pieceRect.top + pieceRect.height / 2;
+
+                // Check overlap with correct slot
+                const slots = this.puzzleBoard.querySelectorAll('.puzzle-slot');
+                let targetSlot = null;
+
+                slots.forEach(slot => {
+                    const slotRect = slot.getBoundingClientRect();
+                    // Is center of piece inside the slot?
+                    if (centerX >= slotRect.left && centerX <= slotRect.right &&
+                        centerY >= slotRect.top && centerY <= slotRect.bottom) {
+                        targetSlot = slot;
+                    }
+                });
+
+                if (targetSlot) {
+                    const pieceIndex = parseInt(piece.dataset.index);
+                    const slotIndex = parseInt(targetSlot.dataset.index);
+
+                    if (pieceIndex === slotIndex) {
+                        // ✅ CORRECT
+                        // Snap into 3D board
+                        // We must append the piece into the 3D transformed slot to inherit the rotation
+                        piece.style.position = 'absolute';
+                        piece.style.left = '50%';
+                        piece.style.top = '50%';
+                        piece.style.transform = 'translate(-50%, -50%)'; // overrides user drag position
+                        piece.style.margin = '0';
+
+                        targetSlot.innerHTML = ''; // clear shadow text
+                        targetSlot.appendChild(piece);
+
+                        piece.classList.add('sorted');
+
+                        this.puzzledCount++;
+
+                        const groupLettersCount = getGroupLetters(this.puzzleGroup).length;
+                        this.puzzleProgressFill.style.width = `${(this.puzzledCount / groupLettersCount) * 100}%`;
+
+                        this.puzzleFeedback.textContent = `✅ Hebat! ${piece.dataset.name} cocok!`;
+                        this.puzzleFeedback.className = 'challenge-feedback correct';
+                        this.soundManager.playSparkle();
+
+                        const letter = getGroupLetters(this.puzzleGroup)[pieceIndex];
+                        if (this.soundManager._isIOS) {
+                            this.soundManager.playLetterVoice(letter);
+                        } else {
+                            setTimeout(() => this.soundManager.playLetterVoice(letter), 200);
+                        }
+
+                        if (this.puzzledCount >= groupLettersCount) {
+                            setTimeout(() => this._puzzleGroupComplete(), 1000);
+                        }
+                    } else {
+                        // ❌ WRONG SLOT
+                        this._bouncePieceBack(piece, '❌ Huruf ini bukan di tempatnya!');
+                    }
+                } else {
+                    // Dropped outside
+                    this._bouncePieceBack(piece, '');
+                }
+            }
+
+            _bouncePieceBack(piece, message) {
+                if (message) {
+                    this.puzzleFeedback.textContent = message;
+                    this.puzzleFeedback.className = 'challenge-feedback wrong';
+                    this.soundManager.playBuzz();
+                    piece.style.animation = 'wrong-shake 0.4s ease';
+                }
+
+                // Restore to scatter area
+                this.puzzleScatterArea.appendChild(piece);
+                piece.style.position = 'absolute';
+                piece.style.left = piece.dataset.origLeft;
+                piece.style.top = piece.dataset.origTop;
+                piece.style.margin = '';
+
+                setTimeout(() => piece.style.animation = '', 400);
+            }
+
+            _puzzleGroupComplete() {
+                const totalGroups = Math.ceil(ALL_HIJAIYAH.length / 6);
+
+                // Animate board clearing
+                gsap.to(this.puzzleBoardContainer, {
+                    y: -50,
+                    opacity: 0,
+                    duration: 0.5,
+                    ease: 'power2.in',
+                    onComplete: () => {
+                        if (this.puzzleGroup < totalGroups - 1) {
+                            this.soundManager.playCelebration();
+                            this.puzzleFeedback.textContent = '🌟 Sempurna! Lanjut ke grup berikutnya...';
+                            this.puzzleFeedback.className = 'challenge-feedback correct';
+
+                            // Render next UI
+                            this._renderPuzzleUI(this.puzzleGroup + 1);
+
+                            // Animate board descending back in
+                            gsap.fromTo(this.puzzleBoardContainer,
+                                { y: -50, opacity: 0 },
+                                { y: 0, opacity: 1, duration: 0.6, ease: 'back.out(1.5)', delay: 0.2 }
+                            );
+                        } else {
+                            // Reset transform for celebration
+                            gsap.set(this.puzzleBoardContainer, { y: 0, opacity: 1 });
+                            this._puzzleComplete();
+                        }
+                    }
+                });
+            }
+
+            _puzzleComplete() {
+                this.puzzleOverlay.classList.remove('show');
+
+                this.celebrationText.innerHTML = '🌟 Super! 🌟<br>You solved all puzzles!';
+                this.celebration.classList.add('show');
+                this.soundManager.playCelebration();
+
+                for (let i = 0; i < 5; i++) {
+                    setTimeout(() => {
+                        this.particleSystem.burst(
+                            new THREE.Vector3(
+                                (Math.random() - 0.5) * 4,
+                                2 + Math.random() * 2,
+                                (Math.random() - 0.5) * 4
+                            )
+                        );
+                    }, i * 250);
+                }
+
+                this.puzzleMode = false;
+
+                if (this._puzzleMoveHandler) {
+                    document.removeEventListener('mousemove', this._puzzleMoveHandler);
+                    document.removeEventListener('mouseup', this._puzzleEndHandler);
+                    document.removeEventListener('touchmove', this._puzzleMoveHandler);
+                    document.removeEventListener('touchend', this._puzzleEndHandler);
+                }
             }
 
             // ==========================================
