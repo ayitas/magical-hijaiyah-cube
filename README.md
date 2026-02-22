@@ -13,8 +13,9 @@ An interactive 3D educational game to learn **all 28 Hijaiyah (Arabic alphabet)*
 - **Smooth Animations** — Squash & stretch, rotation, particle bursts, and floating idle (GSAP)
 - **Toddler-Friendly UI** — Large buttons, pastel colors, progress dots, and celebration overlay
 - **Auto Group Progression** — Complete a group → brief celebration → automatically loads the next group
-- **100% Standalone** — Single `index.html` file, no build step, no external assets
-- **Responsive** — Works on mobile, tablet, and desktop
+- **4 Interactive Game Modes** — Explore, Challenge, Draw, and Sort
+- **100% Standalone** — Single `index.html` file (plus one image), no build step
+- **Responsive** — Works beautifully on mobile, tablet, and desktop
 
 ## 🎯 Game Modes
 
@@ -27,7 +28,10 @@ Listen to each letter's pronunciation and pick the correct Arabic letter from 4 
 ### 🖌️ Draw Mode
 Practice writing Hijaiyah letters! A faded reference letter guides your strokes on the canvas. The app uses pixel-based template matching to validate your drawing — get ≥35% match to advance to the next letter.
 
-> Feedback messages are in Indonesian: **"Kamu benar, ayo lanjut!"** (correct) / **"Kamu salah, ayo coba lagi!"** (wrong)
+### 🧺 Sort Mode
+A drag-and-drop mini-game where all 28 Hijaiyah letters grow as apples on a beautiful, realistically-scaled tree. Drag each apple into the correct group basket based on the displayed Arabic alphabet legend. Features snap-back validation on wrong drops and satisfying sound effects.
+
+> Feedback messages are in Indonesian: **"Kamu benar, ayo lanjut!"** (correct) / **"Kamu salah, ayo coba lagi!"** (wrong) / **"Buah ini bukan di keranjang yang tepat!"** (wrong sort)
 
 ## 🚀 Quick Start
 
